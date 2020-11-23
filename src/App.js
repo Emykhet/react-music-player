@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import "./App.css"
+
+import Song from "./components/Song"
+import Songs from "./components/Songs"
+import Playlist from "./components/Playlist"
+import PlaylistSong from "./components/PlaylistSong"
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2>App</h2>
+      <Song />
+      <Playlist />
+      <PlaylistSong />
     </div>
   );
 }
