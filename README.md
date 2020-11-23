@@ -2,7 +2,7 @@
 
 # Dependencies
 
-npm i redux react-redux redux-thunk redux-devtools-extension node-sass@4.14.1
+node-sass@4.14.1
 
 npm i --save @fortawesome/fontawesome-svg-core
 npm i --save @fortawesome/free-solid-svg-icons
@@ -19,18 +19,16 @@ npm i --save @fortawesome/react-fontawesome
 7: Progress bar display to display song current duration
 8: Display song cover, title, name
 9: Loop all songs/loop single song
+10: Volume bar
 
 # 10: Playlist display
 
 # 11: Select song from display. Play if play state is already on
 
-# 12: Volume bar
-
 # Issues
 
 1: NaN on initial song timing load
 2: useContext for all state reformatting
-3: Progressbar not sycned with time
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

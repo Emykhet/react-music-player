@@ -70,7 +70,6 @@ const secToMinFunc = (param) => {
 
         let currentIndex = songs.findIndex(song => song.id === currentSong.id)
         await setSongEnd(true)
-        console.log(songEnd, currentIndex)
 
         if(isLoopOne){
             audioRef.current.play()
@@ -100,7 +99,6 @@ const secToMinFunc = (param) => {
 
     const dragHandler =(e)=>{
         audioRef.current.currentTime = e.target.value
-        console.log(e.target.value)
         setCurrentTime(e.target.value)
     }
 

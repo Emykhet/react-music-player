@@ -1,17 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
-console.log(process.env)
-
 function musicList() {
   return [
-    {
-      id: uuidv4(),
-        name: "Going Back",
-        cover: process.env.REACT_APP_GB_COVER,
-        artist: "Swørn",
-        audio: process.env.REACT_APP_GB_AUDIO,
-        active: true,
-      },
       {
         id: uuidv4(),
         name: "Warm Feeling",
@@ -19,6 +9,14 @@ function musicList() {
         artist: "Xander",
         audio: process.env.REACT_APP_WF_AUDIO,
         active: false,
+      },
+      {
+      id: uuidv4(),
+        name: "Going Back",
+        cover: process.env.REACT_APP_GB_COVER,
+        artist: "Swørn",
+        audio: process.env.REACT_APP_GB_AUDIO,
+        active: true,
       },
       {
         id: uuidv4(),
