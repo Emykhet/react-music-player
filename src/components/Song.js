@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import { fetchSong } from "../actions/songActions"
-
-
+import React, { useEffect, useRef, useState } from "react"
+import songDatabase from "../songDatabase"
 
 const Song = () => {
 // Initial State 
     const audioRef = useRef()
     const rangeRef = useRef()
+    const [songs, setSongs] = useState(songDatabase())
+    const [volume, setVolume] = useState(0)
     const [currentSong, setCurrentSong] = useState([])
     const [isPlaying, setIsplaying] = useState(false)
     const [isLoopOne, setIsLoopOne] = useState(false)
@@ -18,25 +16,13 @@ const Song = () => {
     const [songDuration, setSongDuration] = useState(0)
     const [songDurationPerc, setSongDurationPerc] = useState(0)
 
-//  Dispatch
-    const dispatch = useDispatch()
-
-// Selector
-    const songList = useSelector(state => state.songList)
-    const {songs, loading, error} = songList
 
 // UseEffect
     useEffect(() => {
-        if(songs && loading === false){
+        if(songs){
             setCurrentSong(songs[0]) 
-            setCurrentTime(0)
         }
-    }, [dispatch, songs, loading])
-
-
-    useEffect(()=>{
-      dispatch(fetchSong())
-    }, [dispatch])
+    }, [songs])
 
 // Utils
 
@@ -105,12 +91,19 @@ const secToMinFunc = (param) => {
     setCurrentTime(current)
     setSongDuration(duration)
     setSongDurationPerc(percentage)
+
+    rangeRef.current.value = (currentTime)
 }
 
     const dragHandler =(e)=>{
         audioRef.current.currentTime = e.target.value
         console.log(e.target.value)
         setCurrentTime(e.target.value)
+    }
+
+    const changeVolumeHandler = (e) =>{
+        const value = e.target.value;
+        audioRef.current.volume = value;
     }
 
     const prevNextSongHandler = async(el) =>{
@@ -148,6 +141,15 @@ const secToMinFunc = (param) => {
                 name="" id=""/>
                 <p>start: {secToMinFunc(currentTime)}</p>
                 <p>end:{secToMinFunc(songDuration)}</p>
+                <label htmlFor="volume">Volume</label>
+                <input
+                    onChange={changeVolumeHandler}
+                    max="1"
+                    min="0"
+                    step="0.01"
+                    type="range"
+                    id="volume"
+                />
              </div>
             
             <div className="loop-container">
