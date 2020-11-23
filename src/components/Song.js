@@ -16,7 +16,6 @@ const Song = () => {
     const [songDuration, setSongDuration] = useState(0)
     const [songDurationPerc, setSongDurationPerc] = useState(0)
 
-
 // UseEffect
     useEffect(() => {
         if(songs){
@@ -66,9 +65,13 @@ const secToMinFunc = (param) => {
      
     }
 
+
     const songEndTimeHandler = async()=>{
+
         let currentIndex = songs.findIndex(song => song.id === currentSong.id)
         await setSongEnd(true)
+        console.log(songEnd, currentIndex)
+
         if(isLoopOne){
             audioRef.current.play()
         }
