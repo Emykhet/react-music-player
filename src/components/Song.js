@@ -5,8 +5,10 @@ const Song = () => {
 // Initial State 
     const audioRef = useRef()
     const rangeRef = useRef()
+    const volRef = useRef()
+
     const [songs, setSongs] = useState(songDatabase())
-    const [volume, setVolume] = useState(0)
+    const [volume, setVolume] = useState()
     const [currentSong, setCurrentSong] = useState([])
     const [isPlaying, setIsplaying] = useState(false)
     const [isLoopOne, setIsLoopOne] = useState(false)
@@ -20,6 +22,8 @@ const Song = () => {
     useEffect(() => {
         if(songs){
             setCurrentSong(songs[0]) 
+            audioRef.current.volume = .8;
+            volRef.current.value =.8
         }
     }, [songs])
 
@@ -145,6 +149,7 @@ const secToMinFunc = (param) => {
                 <label htmlFor="volume">Volume</label>
                 <input
                     onChange={changeVolumeHandler}
+                    ref={volRef}
                     max="1"
                     min="0"
                     step="0.01"
