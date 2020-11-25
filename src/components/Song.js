@@ -1,18 +1,24 @@
-import React, { useEffect, useRef, useState } from "react"
-import songDatabase from "../songDatabase"
+import React, { useEffect, useRef, useState, useContext } from "react"
+import StateContext from "../stateContext"
+// Utils
+import {secToMinFunc} from "../utils/utilFunctions"
 
 const Song = () => {
 // Initial State 
+    const {state} = useContext(StateContext)
+
     const audioRef = useRef()
     const rangeRef = useRef()
     const volRef = useRef()
 
-    const [songs, setSongs] = useState(songDatabase())
-    const [volume, setVolume] = useState()
+    const songs = state.songs
     const [currentSong, setCurrentSong] = useState([])
+// ==============
+    // const [volume, setVolume] = useState()
     const [isPlaying, setIsplaying] = useState(false)
     const [isLoopOne, setIsLoopOne] = useState(false)
     const [isLoopAll, setIsLoopAll] = useState(false)
+
     const [songEnd, setSongEnd] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [songDuration, setSongDuration] = useState(0)
@@ -21,21 +27,14 @@ const Song = () => {
 // UseEffect
     useEffect(() => {
         if(songs){
-            setCurrentSong(songs[0]) 
+            const activeSongIndex = songs.findIndex(song => song.active === true)
+            setCurrentSong(songs[activeSongIndex]) 
             audioRef.current.volume = .8;
             volRef.current.value =.8
         }
     }, [songs])
 
-// Utils
-
-const secToMinFunc = (param) => {
-    return  Math.floor(param / 60) + ":" + 
-    ("0" + Math.floor(param % 60)).slice(-2)
-}
-
 // Handlers
-
     const playSongHandler = () =>{
         if(!isPlaying){
             setIsplaying(true)
@@ -55,8 +54,8 @@ const secToMinFunc = (param) => {
             }
             setIsLoopOne(true)
         }  
-     
     }
+
     const loopAllSongsHandler = () =>{
         if(isLoopAll){
             setIsLoopAll(false)
@@ -66,12 +65,9 @@ const secToMinFunc = (param) => {
             }
             setIsLoopAll(true)
         }  
-     
     }
 
-
     const songEndTimeHandler = async()=>{
-
         let currentIndex = songs.findIndex(song => song.id === currentSong.id)
         await setSongEnd(true)
 
@@ -112,12 +108,11 @@ const secToMinFunc = (param) => {
     }
 
     const prevNextSongHandler = async(el) =>{
-       
         // Find current Song Index
         let currentIndex = songs.findIndex(song => song.id === currentSong.id)
 
         //   FORWARD
-        if(el === "forward"){
+        if(el === "forward"){            
             currentIndex = currentIndex + 1
             await setCurrentSong(songs[currentIndex % songs.length])            
         }
