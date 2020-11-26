@@ -1,14 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 
-function musicList() {
-  return [
+const musicList = [
       {
         id: uuidv4(),
         name: "Warm Feeling",
         cover:process.env.REACT_APP_WF_COVER,
         artist: "Xander",
         audio: process.env.REACT_APP_WF_AUDIO,
-        active: false,
+        active: true,
       },
       {
       id: uuidv4(),
@@ -16,7 +15,7 @@ function musicList() {
         cover: process.env.REACT_APP_GB_COVER,
         artist: "Swørn",
         audio: process.env.REACT_APP_GB_AUDIO,
-        active: true,
+        active: false,
       },
       {
         id: uuidv4(),
@@ -51,6 +50,5 @@ function musicList() {
         active: false,
       },
   ];
-}
 
 export default musicList;
