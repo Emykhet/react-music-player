@@ -1,17 +1,40 @@
-import React, {useDispatch, useContext } from "react"
+import React, {useState, useEffect, useContext } from "react"
 import StateContext from "../stateContext"
-import {FETCH_ACTIVE_SONG} from "../stateActionTypes"
+import {
+    FETCH_ACTIVE_SONG,
+    TOOGLE_ACTIVE_SONG,
+} from "../stateActionTypes"
 
 const SongControls = () => {
     const {state, dispatch} = useContext(StateContext)
-    const activeSongHandler = (e)=>{
-        e.preventDefault()
-        dispatch({type: FETCH_ACTIVE_SONG})
+    const activeSong = state.activeSong
+    const songs = state.songs
+    const [songInfo, setSongInfo] = useState({
+        currentTime: 0,
+        duration: 0,
+        duraratonPercentage: 0,
+        volume: 0,
+        end: false,
+    })
+
+    const prevNextSongHandler = (el)=>{
+        // Find current Song Index
+        let currentIndex = state.songs.findIndex(song => song.id === activeSong.id)
+
+        //   FORWARD
+        if(el === "forward"){ 
+            currentIndex++
+            dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })         
+        }
+         //  REWIND
+         if(el === "rewind"){ 
+            currentIndex--
+            dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })         
+        }
     }
-    
+
     return (
         <div>
-            <button onClick={activeSongHandler}>ACTIVE SONG</button>
             <div className="progressbar-container">
                <input 
                 type="range" 
@@ -35,11 +58,11 @@ const SongControls = () => {
             </div>
 
             <div className="skip-play-container">
-            <button  type="submit">prev</button>
+            <button onClick={e => prevNextSongHandler("rewind")} type="submit">prev</button>
 
             <button type="submit">play</button>
 
-            <button type="submit">next</button>
+            <button onClick={e => prevNextSongHandler("forward")} type="submit">next</button>
             </div>
         </div>
     )

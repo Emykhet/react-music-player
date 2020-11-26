@@ -7,7 +7,7 @@ const musicList = [
         cover:process.env.REACT_APP_WF_COVER,
         artist: "Xander",
         audio: process.env.REACT_APP_WF_AUDIO,
-        active: false,
+        active: true,
       },
       {
       id: uuidv4(),
@@ -15,7 +15,7 @@ const musicList = [
         cover: process.env.REACT_APP_GB_COVER,
         artist: "Swørn",
         audio: process.env.REACT_APP_GB_AUDIO,
-        active: true,
+        active: false,
       },
       {
         id: uuidv4(),
