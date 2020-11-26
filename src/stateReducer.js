@@ -16,18 +16,7 @@ const stateReducer = (state, action) =>{
                         }
                         return song
                     })
-                    console.log("From Reducer fetch active", selectedSong)
                     return {...state, songs: songsNewStatus, activeSong: selectedSong}
-
-        case TOOGLE_ACTIVE_SONG:
-            // Find current Song Index
-            let currentIndex = state.songs.map(song => {
-
-            })
-            // const currentSongActive = !state.activeSong.active
-            
-            console.log("From Reducer", action.payload)
-            return {...state, }
 
         default:
             return state
