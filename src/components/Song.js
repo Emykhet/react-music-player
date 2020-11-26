@@ -6,9 +6,7 @@ const Song = () => {
 // Initial State 
     const {state} = useContext(StateContext)
     const activeSong = state.activeSong
-    // console.log("Fom Song.js", activeSong)
-
-    // console.log("::::",song)
+    
     return (
         <div>
             <p>{activeSong.artist}</p>

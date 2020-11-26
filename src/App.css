@@ -37,3 +37,16 @@ input{
     width: 100px;
     cursor: pointer;
 }
+
+button{
+    outline:none;
+    border:none;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    background-color: #cac9c9;
+    margin: .5rem;
+
+}
+button:hover{
+  opacity: 0.8;
+}
