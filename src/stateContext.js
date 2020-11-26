@@ -9,7 +9,8 @@ const StateContext = createContext({
         duraratonPercentage: 0,
         volume: 0,
         end: false,
-    }
+    },
+    activeSong: songDatabase[0]
 })
 
 export default StateContext

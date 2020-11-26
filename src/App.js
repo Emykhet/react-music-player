@@ -12,14 +12,13 @@ import "./App.css"
 function App() {
   const initialState = useContext(StateContext)
   const [state, dispatch] = useReducer(stateReducer, initialState)
-  console.log("SONGS***", initialState)
+  // console.log("State_App.js", state)
   return (
     <div className="App">
       <h2>App</h2>
       <StateContext.Provider value={{state, dispatch}}>
         <Song />
         <Playlist />
-        <PlaylistSong />
       </StateContext.Provider>
     </div>
   );
