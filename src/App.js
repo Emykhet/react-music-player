@@ -5,7 +5,6 @@ import stateReducer from "./stateReducer"
 // Components
 import Song from "./components/Song"
 import Playlist from "./components/Playlist"
-import PlaylistSong from "./components/PlaylistSong"
 // Styles
 import "./App.css"
 
