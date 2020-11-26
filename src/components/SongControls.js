@@ -11,8 +11,8 @@ const SongControls = () => {
     const songs = state.songs
     const [songAudio, setsongAudio] = useState({
         isPlaying:false,
-        loopOne: false,
-        loopAll: false,
+        isLoopOne: false,
+        isLoopAll: false,
         end: false,
         currentTime: 0,
         duration: 0,
@@ -22,6 +22,14 @@ const SongControls = () => {
     const audioRef = useRef()
     
 // Handlers
+
+    const songEndTimeHandler = async()=>{
+        await setsongAudio({...songAudio, end: true})
+        if(songAudio.isLoopOne || songAudio.isLoopOne ){
+            audioRef.current.play()
+        }
+    }
+
     const playSongHandler = () =>{
         if(!songAudio.isPlaying){
             setsongAudio({...songAudio, isPlaying: true})
@@ -32,7 +40,25 @@ const SongControls = () => {
         }    
     }
 
-    const prevNextSongHandler = (el)=>{
+    const loopOneSongHandler = () =>{
+        if(songAudio.isLoopOne){
+            setsongAudio({...songAudio, isLoopOne: false})
+
+        }else{
+            setsongAudio({...songAudio, isLoopOne: true, isLoopAll: false})
+        }  
+    }
+
+    const loopAllSongsHandler = () =>{
+        if(songAudio.isLoopAll){
+            setsongAudio({...songAudio, isLoopAll: false})
+          
+        }else{
+            setsongAudio({...songAudio, isLoopAll: true, isLoopOne: false})
+        }  
+    }
+
+    const prevNextSongHandler = async (el)=>{
         // Find current Song Index
         let currentIndex = state.songs.findIndex(song => song.id === activeSong.id)
 
@@ -42,8 +68,10 @@ const SongControls = () => {
             if((currentIndex) % songs.length === 0){
                currentIndex = 0
             }
-            setsongAudio({...songAudio, isPlaying: false})
-            dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })         
+            await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })  
+            if(songAudio.isLoopAll || songAudio.isLoopOne){
+                await audioRef.current.play()
+            }    
         }
          //  REWIND
          if(el === "rewind"){ 
@@ -51,8 +79,10 @@ const SongControls = () => {
             if((currentIndex) % songs.length === -1){
                 currentIndex = songs.length - 1
             }
-            setsongAudio({...songAudio, isPlaying: false})
-            dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })         
+            await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })  
+            if(songAudio.isLoopAll || songAudio.isLoopOne){
+                await audioRef.current.play()
+            }        
         }
     }
 
@@ -76,8 +106,8 @@ const SongControls = () => {
              </div>
             
             <div className="loop-container">
-                <button type="submit">LOOP ONE</button>
-                <button type="submit">LOOP ALL</button>
+                <button onClick={loopOneSongHandler} type="submit">LOOP ONE</button>
+                <button onClick={loopAllSongsHandler} type="submit">LOOP ALL</button>
             </div>
 
             <div className="skip-play-container">
@@ -90,6 +120,7 @@ const SongControls = () => {
             <audio 
             ref={audioRef} 
             src={activeSong.audio}
+            onEnded={songEndTimeHandler} 
             />
         </div>
     )

@@ -9,12 +9,9 @@ const Song = () => {
     
     return (
         <div>
-            <p>{activeSong.artist}</p>
             <img src={activeSong.cover} alt={activeSong.name}/>
             <p>{activeSong.name}</p>
-            {activeSong.active ? <p>Active</p> : <p>Inactive</p>}
-            <p>Artist: {activeSong.artist}</p>
-            <p>ID: {activeSong.id}</p>
+            <p>{activeSong.artist}</p>
             <SongControls/>
         </div>
     )
