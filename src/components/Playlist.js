@@ -1,9 +1,20 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
+import StateContext from "../stateContext"
 
-const PlayList = () => {
+import PlaylistSong from "./PlaylistSong"
+
+const PlayList = ({audioRef}) => {
+    const {state} = useContext(StateContext)
+    const songs = state.songs
     return (
         <div>
-            <h4>playlist</h4>
+            {songs.map(song =>(
+                <PlaylistSong
+                song={song}
+                key={song.id}
+                audioRef={audioRef}
+                />
+            ))}
         </div>
     )
 }

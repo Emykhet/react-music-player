@@ -1,60 +1,69 @@
 import React, {useState, useEffect, useContext, useRef } from "react"
 import StateContext from "../stateContext"
+import {secToMinFunc} from "../utils/utilFunctions"
+
 import {
     FETCH_ACTIVE_SONG,
+    SET_SONG_INFO
 } from "../stateActionTypes"
 
-const SongControls = () => {
+const SongControls = ({audioRef}) => {
+
 // Initial State
     const {state, dispatch} = useContext(StateContext)
-    const activeSong = state.activeSong
-    const songs = state.songs
-    const [songAudio, setsongAudio] = useState({
+    const {songs, activeSong, songTime} = state
+    const [songInfo, setSongInfo] = useState({
         isPlaying:false,
         isLoopOne: false,
         isLoopAll: false,
         end: false,
-        currentTime: 0,
-        duration: 0,
-        duraratonPercentage: 0,
-        volume: 0,
+        volume: .7,
     })
-    const audioRef = useRef()
-    
+
+    const rangeRef = useRef()
+    const volRef = useRef()
+
+    useEffect(()=>{
+        dispatch({payload: {...songInfo}, type: SET_SONG_INFO })
+        if(songTime){
+            rangeRef.current.value = songTime.currentTime 
+        }
+    }, [songTime, dispatch, songInfo])
+
 // Handlers
 
-    const songEndTimeHandler = async()=>{
-        await setsongAudio({...songAudio, end: true})
-        if(songAudio.isLoopOne || songAudio.isLoopOne ){
-            audioRef.current.play()
-        }
+    const changeVolumeHandler = (e)=>{
+        audioRef.current.volume = e.target.value; 
+        setSongInfo({...songInfo, volume: e.target.value}) 
+    }
+    
+    const dragHandler = (e)=>{
+        audioRef.current.currentTime = e.target.value
     }
 
     const playSongHandler = () =>{
-        if(!songAudio.isPlaying){
-            setsongAudio({...songAudio, isPlaying: true})
-            audioRef.current.play()
+        if(songInfo.isPlaying){
+            setSongInfo({...songInfo, isPlaying: false})
+            audioRef.current.pause()  
         }else{
-            setsongAudio({...songAudio, isPlaying: false})
-            audioRef.current.pause()
-        }    
+            setSongInfo({...songInfo, isPlaying: true})
+            audioRef.current.play()
+        }  
     }
 
     const loopOneSongHandler = () =>{
-        if(songAudio.isLoopOne){
-            setsongAudio({...songAudio, isLoopOne: false})
-
+        if(songInfo.isLoopOne){
+            setSongInfo({...songInfo, isLoopOne: false})
         }else{
-            setsongAudio({...songAudio, isLoopOne: true, isLoopAll: false})
+            setSongInfo({...songInfo, isLoopOne: true, isLoopAll: false})
         }  
     }
 
     const loopAllSongsHandler = () =>{
-        if(songAudio.isLoopAll){
-            setsongAudio({...songAudio, isLoopAll: false})
-          
+        if(songInfo.isLoopAll){
+            setSongInfo({...songInfo, isLoopAll: false})
         }else{
-            setsongAudio({...songAudio, isLoopAll: true, isLoopOne: false})
+            setSongInfo({...songInfo, isLoopAll: true, isLoopOne: false})
         }  
     }
 
@@ -68,42 +77,59 @@ const SongControls = () => {
             if((currentIndex) % songs.length === 0){
                currentIndex = 0
             }
-            await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })  
-            if(songAudio.isLoopAll || songAudio.isLoopOne){
-                await audioRef.current.play()
-            }    
+            await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG }) 
+            if(songInfo.isLoopAll || songInfo.isLoopOne){
+                return
+            }
         }
          //  REWIND
          if(el === "rewind"){ 
             currentIndex--
             if((currentIndex) % songs.length === -1){
                 currentIndex = songs.length - 1
+                await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG }) 
+                if (songInfo.isPlaying){
+                    audioRef.current.play();
+                    return;
+                } 
             }
-            await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG })  
-            if(songAudio.isLoopAll || songAudio.isLoopOne){
-                await audioRef.current.play()
-            }        
+                await dispatch({payload: currentIndex, type: FETCH_ACTIVE_SONG }) 
+                if(songInfo.isLoopAll || songInfo.isLoopOne){
+                    await audioRef.current.play()
+                    return
+                }      
         }
+            if (songInfo.isPlaying){
+                audioRef.current.play();
+                return;
+            } 
     }
 
     return (
         <div>
-            <div className="progressbar-container">
-               <input 
-                type="range" 
-                min={0}
-                max={100}/>
-                <p>start: </p>
-                <p>end:</p>
-                <label htmlFor="volume">Volume</label>
-                <input
-                    max="1"
-                    min="0"
-                    step="0.01"
-                    type="range"
-                    id="volume"
-                />
-             </div>
+            {songTime && (
+                <div className="progressbar-container">
+                <input 
+                    ref={rangeRef}
+                    type="range" 
+                    min={0}
+                    max={songTime.duration || 0}
+                    onChange={dragHandler}
+                    name="" id=""/>
+                    <p>start: {secToMinFunc(songTime.currentTime || 0)}</p>
+                    <p>end:{secToMinFunc(songTime.duration)}</p>
+                    <label htmlFor="volume">Volume</label>
+                    <input
+                        onChange={changeVolumeHandler}
+                        ref={volRef}
+                        max="1"
+                        min="0"
+                        step="0.01"
+                        type="range"
+                        id="volume"
+                    />
+                 </div>
+            )}
             
             <div className="loop-container">
                 <button onClick={loopOneSongHandler} type="submit">LOOP ONE</button>
@@ -117,11 +143,6 @@ const SongControls = () => {
 
             <button onClick={e => prevNextSongHandler("forward")} type="submit">next</button>
             </div>
-            <audio 
-            ref={audioRef} 
-            src={activeSong.audio}
-            onEnded={songEndTimeHandler} 
-            />
         </div>
     )
 }

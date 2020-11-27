@@ -1,6 +1,7 @@
 import {
     FETCH_ACTIVE_SONG,
-    TOOGLE_ACTIVE_SONG,
+    SET_SONG_INFO,
+    SET_SONG_TIME,
 } from "./stateActionTypes"
 
 const stateReducer = (state, action) =>{
@@ -16,6 +17,12 @@ const stateReducer = (state, action) =>{
                         return song
                     })
         return {...state, songs: songsActiveStatus, activeSong: selectedSong}
+        
+        case SET_SONG_INFO:
+        return {...state, songInfo: action.payload}
+
+        case SET_SONG_TIME:
+        return {...state, songTime: action.payload}
 
         default:
             return state

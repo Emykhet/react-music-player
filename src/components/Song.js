@@ -5,14 +5,13 @@ import SongControls from "./SongControls"
 const Song = () => {
 // Initial State 
     const {state} = useContext(StateContext)
-    const activeSong = state.activeSong
+    const {activeSong }= state
     
     return (
-        <div>
+        <div className="song-display">
             <img src={activeSong.cover} alt={activeSong.name}/>
             <p>{activeSong.name}</p>
             <p>{activeSong.artist}</p>
-            <SongControls/>
         </div>
     )
 }

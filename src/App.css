@@ -10,11 +10,17 @@ body{
 }
 .App {
     max-height: 100vh;
+    position: relative;
+}
+.player{
+    display: flex;
 }
 
 img{
     width: 400px;
 }
+
+
 
 input{
     width: 60%;
@@ -22,23 +28,35 @@ input{
 
 /* Playlist */
 
+/* .playlist{
+position: absolute;
+bottom: 0;
+right: 0;
+display: flex;
+} */
 
 .playlist-song-container {
     margin: 2rem auto;
     width: 50%;
 }
-
-.playlist-song{
+.playlist-item{
     cursor: pointer;
 }
-
-.playlist-song:hover{
-    opacity: .8;
+.playlist-item:hover{
+    background-color: rgb(243, 209, 226);
 }
 
-.playlist-song img{
+.playlist-item img{
     width: 100px;
-    cursor: pointer;
+}
+
+/* .song-display{
+    display: flex;
+
+} */
+
+.active-song{
+    background-color: #d4d4d4;
 }
 
 button{

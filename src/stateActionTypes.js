@@ -1,1 +1,3 @@
 export const FETCH_ACTIVE_SONG = "FETCH_ACTIVE_SONG"
+export const SET_SONG_INFO= "SET_SONG_INFO"
+export const  SET_SONG_TIME= " SET_SONG_TIME"
