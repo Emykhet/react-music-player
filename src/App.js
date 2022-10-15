@@ -66,7 +66,7 @@ useEffect(()=>{
   }
 
   return (
-    <div className="App">
+    <div className="App" style={{background: "#FFFFFF"}}>
       <h2>App</h2>
       <StateContext.Provider value={{state, dispatch}}>
         <button onClick={showPlaylistHandler}>Playlist</button>
